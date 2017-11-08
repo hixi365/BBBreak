@@ -9,7 +9,7 @@ public class Test_PlayerMove : MonoBehaviour {
 
 	public float widthPlayerMove = 0.5f;	// プレイヤーが移動可能な幅 (16:9で 0.56)
 	public Transform transformPlayer;		// プレイヤー移動用
-	public Transform transformQuadPlayer;   // プレイヤーの大きさ取得用
+	public Transform transformSizePlayer;   // プレイヤーの大きさ取得用
 
 	public Camera cameraMain;               // スクリーン座標 -> ワールド座標変換用
 
@@ -25,7 +25,7 @@ public class Test_PlayerMove : MonoBehaviour {
 
 	}
 
-	void Update ()
+	private void Update ()
 	{
 
 		// マウス座標の取得
@@ -34,8 +34,8 @@ public class Test_PlayerMove : MonoBehaviour {
 
 		// プレイヤーに座標書き込み
 		float x = posWMouseCurrent.x;
-		x = Mathf.Min(x, +widthPlayerMove - transformQuadPlayer.localScale.x / 2);
-		x = Mathf.Max(x, -widthPlayerMove + transformQuadPlayer.localScale.x / 2);
+		x = Mathf.Min(x, +widthPlayerMove - transformSizePlayer.localScale.x / 2);
+		x = Mathf.Max(x, -widthPlayerMove + transformSizePlayer.localScale.x / 2);
 		transformPlayer.position = new Vector3(x, yPlayerBase, 0f);
 			
 	}
