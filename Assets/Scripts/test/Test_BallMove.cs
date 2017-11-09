@@ -9,6 +9,7 @@ public class Test_BallMove : MonoBehaviour {
 
 	public LayerMask layerRefrect;	// 反射するレイヤータグ
 	public LayerMask layerFailed;	// ミスするレイヤータグ
+	public LayerMask layerBlock;	// ブロックレイヤータグ
 
 	private void Start ()
 	{
@@ -32,7 +33,7 @@ public class Test_BallMove : MonoBehaviour {
 		{
 
 			// 移動方向へレイキャスト (弾の大きさは考慮していない)
-			RaycastHit2D c = Physics2D.Raycast(pos, vec, Vector2.Distance(Vector2.zero, vec), layerRefrect + layerFailed);
+			RaycastHit2D c = Physics2D.Raycast(pos, vec, Vector2.Distance(Vector2.zero, vec), layerRefrect + layerFailed + layerBlock);
 
 			Debug.DrawLine(pos, pos + vec * 5);
 
@@ -47,6 +48,12 @@ public class Test_BallMove : MonoBehaviour {
 			{
 				Destroy(gameObject);
 				return;
+			}
+
+			// ブロックであれば破壊
+			if(1 << c.collider.gameObject.layer == layerBlock.value)
+			{
+				Destroy(c.transform.gameObject);
 			}
 
 			// 反射面であれば反射し、再度判定
