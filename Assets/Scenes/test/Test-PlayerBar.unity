@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 290327982}
   - component: {fileID: 290327981}
   - component: {fileID: 290327983}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,9 +264,8 @@ GameObject:
   - component: {fileID: 569676099}
   - component: {fileID: 569676101}
   - component: {fileID: 569676100}
-  - component: {fileID: 569676103}
   - component: {fileID: 569676102}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -370,22 +369,8 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 7
---- !u!114 &569676103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 569676098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97eb14168edc52748991c3806538d559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isWall: 1
-  isVertical: 0
-  isPlus: 1
 --- !u!1 &945356987
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,9 +502,8 @@ GameObject:
   - component: {fileID: 989030933}
   - component: {fileID: 989030935}
   - component: {fileID: 989030934}
-  - component: {fileID: 989030936}
   - component: {fileID: 989030937}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -605,20 +589,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
---- !u!114 &989030936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 989030932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97eb14168edc52748991c3806538d559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isWall: 1
-  isVertical: 1
-  isPlus: 0
 --- !u!50 &989030937
 Rigidbody2D:
   serializedVersion: 4
@@ -693,9 +663,8 @@ GameObject:
   - component: {fileID: 1152209446}
   - component: {fileID: 1152209448}
   - component: {fileID: 1152209447}
-  - component: {fileID: 1152209450}
   - component: {fileID: 1152209449}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -801,20 +770,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 7
---- !u!114 &1152209450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1152209445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97eb14168edc52748991c3806538d559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isWall: 1
-  isVertical: 0
-  isPlus: 0
 --- !u!1 &1256191788
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,9 +780,8 @@ GameObject:
   - component: {fileID: 1256191789}
   - component: {fileID: 1256191791}
   - component: {fileID: 1256191790}
-  - component: {fileID: 1256191792}
   - component: {fileID: 1256191793}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -913,20 +867,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
---- !u!114 &1256191792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1256191788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97eb14168edc52748991c3806538d559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isWall: 1
-  isVertical: 1
-  isPlus: 1
 --- !u!50 &1256191793
 Rigidbody2D:
   serializedVersion: 4
@@ -985,6 +925,16 @@ Prefab:
     - target: {fileID: 4860321243607210, guid: 102d2b4789313f14f8afba5cb91445ea, type: 2}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114482321681452336, guid: 102d2b4789313f14f8afba5cb91445ea,
+        type: 2}
+      propertyPath: layerRefrect.m_Bits
+      value: 1280
+      objectReference: {fileID: 0}
+    - target: {fileID: 114482321681452336, guid: 102d2b4789313f14f8afba5cb91445ea,
+        type: 2}
+      propertyPath: layerFailed.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 102d2b4789313f14f8afba5cb91445ea, type: 2}

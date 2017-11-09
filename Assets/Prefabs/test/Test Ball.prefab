@@ -82,6 +82,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vecMove: {x: 0, y: 1, z: 0}
+  layerRefrect:
+    serializedVersion: 2
+    m_Bits: 1280
+  layerFailed:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!212 &212342024239351898
 SpriteRenderer:
   m_ObjectHideFlags: 1
