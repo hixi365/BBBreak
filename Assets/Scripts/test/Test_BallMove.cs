@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// テスト
+// ボールの動き
+
 public class Test_BallMove : MonoBehaviour {
 
 	public Vector3 vecMove;			// 弾の移動ベクトル
@@ -9,7 +12,9 @@ public class Test_BallMove : MonoBehaviour {
 
 	public LayerMask layerRefrect;	// 反射するレイヤータグ
 	public LayerMask layerFailed;	// ミスするレイヤータグ
-	public LayerMask layerBlock;	// ブロックレイヤータグ
+	public LayerMask layerBlock;    // ブロックレイヤータグ
+
+	public GameObject prefabItem;
 
 	private void Start ()
 	{
@@ -17,7 +22,7 @@ public class Test_BallMove : MonoBehaviour {
 		posCurrent = transform.position;
 
 		float angle = Random.Range(0, Mathf.PI * 2);
-		Vector3 speed = 5.0f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
+		Vector3 speed = 2.0f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
 		vecMove = speed;
 
 	}
@@ -53,7 +58,15 @@ public class Test_BallMove : MonoBehaviour {
 			// ブロックであれば破壊
 			if(1 << c.collider.gameObject.layer == layerBlock.value)
 			{
+
+				// 一定確率でアイテム (テスト)
+				if (Random.Range(0, 10) < 2f)
+				{
+					Instantiate(prefabItem, c.transform.position, Quaternion.identity);
+				}
+
 				Destroy(c.transform.gameObject);
+
 			}
 
 			// 反射面であれば反射し、再度判定
