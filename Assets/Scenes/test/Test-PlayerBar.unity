@@ -11031,6 +11031,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114482321681452336, guid: 102d2b4789313f14f8afba5cb91445ea,
+        type: 2}
+      propertyPath: layerPlayer.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 114482321681452336, guid: 102d2b4789313f14f8afba5cb91445ea,
+        type: 2}
+      propertyPath: layerRefrect.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 102d2b4789313f14f8afba5cb91445ea, type: 2}
   m_IsPrefabParent: 0
