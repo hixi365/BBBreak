@@ -24,7 +24,7 @@ public class Test_BallMove : MonoBehaviour {
 
 		posCurrent = transform.position;
 
-		float angle = Random.Range(0, Mathf.PI * 2);
+		float angle = - Mathf.PI / 2; // Random.Range(0, Mathf.PI * 2);
 		Vector3 speed = 1.0f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
 		vecMove = speed;
 
@@ -109,7 +109,7 @@ public class Test_BallMove : MonoBehaviour {
 
 			}
 
-			pos = c.point - (Vector2)Vector3.Normalize(vec) * (transform.localScale.x) / 128;
+			pos = c.point - (Vector2)Vector3.Normalize(vec) * (transform.localScale.x) / 128;	// 128 : sprite unit scale
 			vec = new_vec;
 			vec *= (1 - c.fraction);
 
