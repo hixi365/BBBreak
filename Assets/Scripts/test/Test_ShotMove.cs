@@ -23,9 +23,21 @@ public class Test_ShotMove : MonoBehaviour {
 
 	public bool isBarMode = false;  // モード : 回転する棒
 
+	public float ySpriteAlpha1 = 0f;		// スプレイトアニメーション α=1 y座標
+	public float ySpriteAlpha0 = -0.5f;		// スプライトアニメーション α=0 y座標
+
 	public GameObject prefabItem;
 
 	public float degMaxRefrect = 45;    // プレイヤーの端部に当たった最大反射角 (45 : 10.5時 ～ 1.5時)
+
+	private SpriteRenderer rendererBar; // 棒のスプライトレンダラ
+
+	private void Awake()
+	{
+
+		rendererBar = objBar.GetComponent<SpriteRenderer>();
+
+	}
 
 	private void Start()
 	{
@@ -44,41 +56,64 @@ public class Test_ShotMove : MonoBehaviour {
 	private void Update()
 	{
 
+		Move();
+		UpdateSprite();
+
+	}
+
+	// 移動
+	private void Move()
+	{
+
 		float circle_r = objCircle.transform.lossyScale.x * 2 / (40 / 2); // 40 : sprite unit scale
 
-		Vector2 vec_n = (Vector2)Vector3.Normalize(vecMove);	// 進む方向
-		Vector2 pos = (Vector2)posCurrent;						// 座標
+		Vector2 vec_n = (Vector2)Vector3.Normalize(vecMove);    // 進む方向
+		Vector2 pos = (Vector2)posCurrent;                      // 座標
 
 		float vec_power = Vector3.Distance(Vector2.zero, vecMove) * Time.deltaTime; // 進む距離
-		Vector2 new_vec_n = vec_n;													// 計算用
+		Vector2 new_vec_n = vec_n;                                                  // 計算用
 
 		int ray_try = 3; // 壁面反射計算回数 (最低 2)
-		for (int i = 0; i < ray_try; i++)
+		for (int i_ray = 0; i_ray < ray_try; i_ray++)
 		{
 
 			// 円のレイキャスト
-			Vector2 c_offset_c = circle_r * vec_n;								// 移動方向分の弾の大きさ分オフセット
-			Vector2 c_offset_0 = new Vector2(-c_offset_c.y, +c_offset_c.x);		// 移動方向法線方向分の弾の大きさ分オフセット
-			Vector2 c_offset_1 = -c_offset_0;                                   // 移動方向法線方向分の弾の大きさ分オフセット
-			RaycastHit2D c_circle_c = Physics2D.Raycast(pos + c_offset_c, vec_n, vec_power, layerRefrect + layerPlayer + layerFailed + layerBlock);
-			RaycastHit2D c_circle_0 = Physics2D.Raycast(pos + c_offset_0, vec_n, vec_power, layerRefrect + layerPlayer + layerFailed + layerBlock);
-			RaycastHit2D c_circle_1 = Physics2D.Raycast(pos + c_offset_1, vec_n, vec_power, layerRefrect + layerPlayer + layerFailed + layerBlock);
+			Vector2[] offset = new Vector2[5];	// 0度[0] 45度[1, 2] 90度[3, 4]
+			offset[0] = circle_r * vec_n;							// raycast offset (正面)
+			offset[3] = new Vector2(-offset[0].y, +offset[0].x);    // raycast offset (90度)
+			offset[4] = -offset[3];									// raycast offset (90度)
+			offset[1] = (offset[0] + offset[3]) / 2;				// raycast offset (45度)
+			offset[2] = (offset[0] + offset[4]) / 2;                // raycast offset (45度)
 
-			Debug.DrawRay((Vector3)(pos + c_offset_c) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
-			Debug.DrawRay((Vector3)(pos + c_offset_0) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
-			Debug.DrawRay((Vector3)(pos + c_offset_1) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+			// ray 確認
+			Debug.DrawRay((Vector3)(pos + offset[0]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+			Debug.DrawRay((Vector3)(pos + offset[1]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+			Debug.DrawRay((Vector3)(pos + offset[2]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+			Debug.DrawRay((Vector3)(pos + offset[3]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+			Debug.DrawRay((Vector3)(pos + offset[4]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+
+			RaycastHit2D[] c_hit = new RaycastHit2D[5];
+			for(int i = 0; i < 5; i++)
+				c_hit[i] = Physics2D.Raycast(pos + offset[i], vec_n, vec_power, layerRefrect + layerPlayer + layerFailed + layerBlock);
 
 			// 衝突
-			Vector2 c_offset = c_offset_c;	// 衝突座標オフセット (ずらす)
-			RaycastHit2D c = c_circle_c;    // 衝突情報
-			if (c.collider == null) { c = c_circle_0; c_offset = c_offset_0; }
-			if (c.collider == null) { c = c_circle_1; c_offset = c_offset_1; }
+			int c_index = -1;
+			for (int i = 0; i < 5; i++) {
+				if (c_hit[i].collider && c_hit[i].fraction > 0f)
+				{
+					c_index = i;
+					break;
+				}
+			}
 
 			// 衝突がなければ
-			if (c.collider == null)
+			if (c_index == -1)
 			{
 				break;
 			}
+
+			// 計算に用いる衝突情報
+			RaycastHit2D c = c_hit[c_index];
 
 			// 進んだ距離の計算
 			float dis = c.fraction * vec_power;
@@ -119,7 +154,7 @@ public class Test_ShotMove : MonoBehaviour {
 				float p = (c.point.x - x_left) / (x_right - x_left);
 				p = (p - 0.5f) * 2f;
 
-				Debug.Log("player collide" + p);
+			//	Debug.Log("player collide" + p);
 
 				// x成分から反射角度の計算
 				float abs_x = Mathf.Sin(degMaxRefrect);
@@ -130,6 +165,7 @@ public class Test_ShotMove : MonoBehaviour {
 				//	float angle = p * degMaxRefrect * Mathf.Deg2Rad;
 
 				new_vec_n = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
+				angleRoll = -angle * 1000f;
 
 			}
 
@@ -138,13 +174,16 @@ public class Test_ShotMove : MonoBehaviour {
 			{
 
 				new_vec_n = vec_n - 2 * c.normal * Vector2.Dot(vec_n, c.normal);
+				angleRoll = -angleRoll;
 
 			}
 
-			if(c_circle_c.collider)
-				pos = c.point - vec_n * circle_r;
-			else
-				pos = c.point - c_offset - vec_n * circle_r;
+		//	if (c_circle_c.collider)
+		//		pos = c.point - vec_n * circle_r;
+		//	else
+		//		pos = c.point - c_offset - vec_n * circle_r;
+
+			pos = c.point - offset[c_index];
 
 			vec_n = new_vec_n;
 			vec_power -= dis;
@@ -153,7 +192,39 @@ public class Test_ShotMove : MonoBehaviour {
 
 		vecMove = Vector3.Distance(Vector3.zero, vecMove) * Vector3.Normalize(vec_n);
 		posCurrent = pos + vec_n * vec_power;
+
+		angleCurrent += angleRoll * Time.deltaTime;
+
 		transform.position = posCurrent;
+		transform.rotation = Quaternion.Euler(0f, 0f, angleCurrent);
+
+	}
+
+	// 描画関連
+	private void UpdateSprite()
+	{
+
+		Color col = rendererBar.color;
+		
+		if (isBarMode == false)
+		{
+			col.a = 0f;
+		}
+
+		else
+		{
+
+			if (vecMove.y > 0)
+				col.a = 1f;
+
+			else
+			{
+				col.a = Mathf.Clamp((posCurrent.y - ySpriteAlpha0) / (ySpriteAlpha1 - ySpriteAlpha0), 0f, 1f);
+			}
+
+		}
+
+		rendererBar.color = col;
 
 	}
 

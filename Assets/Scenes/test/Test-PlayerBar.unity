@@ -7749,7 +7749,9 @@ MonoBehaviour:
   layerBlock:
     serializedVersion: 2
     m_Bits: 2048
-  isBarMode: 0
+  isBarMode: 1
+  ySpriteAlpha1: 0.3
+  ySpriteAlpha0: -1
   prefabItem: {fileID: 1382614763528396, guid: 6c4ffcdd450da594e93fe4b7bdc81cfb, type: 2}
   degMaxRefrect: 45
 --- !u!4 &377812098
@@ -15706,7 +15708,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &806417916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28836,7 +28838,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1535914165
 MonoBehaviour:
   m_ObjectHideFlags: 0
