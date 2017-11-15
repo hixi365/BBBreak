@@ -7749,6 +7749,9 @@ MonoBehaviour:
   layerBlock:
     serializedVersion: 2
     m_Bits: 2048
+  layerBroken:
+    serializedVersion: 2
+    m_Bits: 16384
   isBarMode: 1
   ySpriteAlpha1: 0.3
   ySpriteAlpha0: -1
@@ -15708,7 +15711,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &806417916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28838,7 +28841,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1535914165
 MonoBehaviour:
   m_ObjectHideFlags: 0

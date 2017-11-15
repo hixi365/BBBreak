@@ -20,6 +20,7 @@ public class Test_ShotMove : MonoBehaviour {
 	public LayerMask layerPlayer;   // プレイヤーレイヤータグ
 	public LayerMask layerFailed;   // ミスするレイヤータグ
 	public LayerMask layerBlock;    // ブロックレイヤータグ
+	public LayerMask layerBroken;   // 破壊済ブロックレイヤータグ
 
 	public bool isBarMode = false;  // モード : 回転する棒
 
@@ -31,11 +32,19 @@ public class Test_ShotMove : MonoBehaviour {
 	public float degMaxRefrect = 45;    // プレイヤーの端部に当たった最大反射角 (45 : 10.5時 ～ 1.5時)
 
 	private SpriteRenderer rendererBar; // 棒のスプライトレンダラ
+	private int layerSetBroken;			// 破壊済ブロックレイヤー (書き込み用)
 
 	private void Awake()
 	{
 
 		rendererBar = objBar.GetComponent<SpriteRenderer>();
+
+		layerSetBroken = 0;
+		int l = layerBroken;
+		while (0 < (l >>= 1))
+			layerSetBroken++;
+
+		Debug.Log(layerSetBroken);
 
 	}
 
@@ -86,11 +95,11 @@ public class Test_ShotMove : MonoBehaviour {
 			offset[2] = (offset[0] + offset[4]) / 2;                // raycast offset (45度)
 
 			// ray 確認
-			Debug.DrawRay((Vector3)(pos + offset[0]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
-			Debug.DrawRay((Vector3)(pos + offset[1]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
-			Debug.DrawRay((Vector3)(pos + offset[2]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
-			Debug.DrawRay((Vector3)(pos + offset[3]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
-			Debug.DrawRay((Vector3)(pos + offset[4]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+		//	Debug.DrawRay((Vector3)(pos + offset[0]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+		//	Debug.DrawRay((Vector3)(pos + offset[1]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+		//	Debug.DrawRay((Vector3)(pos + offset[2]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+		//	Debug.DrawRay((Vector3)(pos + offset[3]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
+		//	Debug.DrawRay((Vector3)(pos + offset[4]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
 
 			RaycastHit2D[] c_hit = new RaycastHit2D[5];
 			for(int i = 0; i < 5; i++)
@@ -129,13 +138,7 @@ public class Test_ShotMove : MonoBehaviour {
 			if (1 << c.collider.gameObject.layer == layerBlock.value)
 			{
 
-				// 一定確率でアイテム (テスト)
-				if (Random.Range(0, 10) < 2f)
-				{
-					Instantiate(prefabItem, c.transform.position, Quaternion.identity);
-				}
-
-				Destroy(c.transform.gameObject);
+				BrokenBlock(c.collider.gameObject);
 
 			}
 
@@ -198,6 +201,8 @@ public class Test_ShotMove : MonoBehaviour {
 		transform.position = posCurrent;
 		transform.rotation = Quaternion.Euler(0f, 0f, angleCurrent);
 
+		RaycastBar();
+
 	}
 
 	// 描画関連
@@ -227,5 +232,59 @@ public class Test_ShotMove : MonoBehaviour {
 		rendererBar.color = col;
 
 	}
+
+	// ブロックの破壊
+	private void BrokenBlock(GameObject block)
+	{
+
+		// 一定確率でアイテム (テスト)
+		if (Random.Range(0, 10) < 2f)
+		{
+			Instantiate(prefabItem, block.transform.position, Quaternion.identity);
+		}
+
+		block.layer = layerSetBroken;
+
+	}
+
+	// 棒部分の破壊判定
+	private void RaycastBar()
+	{
+
+		float bar_w = objBar.transform.lossyScale.x;
+		float bar_h = objBar.transform.lossyScale.y;
+
+		Matrix4x4 mat = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, 0f, angleCurrent), Vector3.one);
+
+		// レイキャスト
+		Vector2[] offset = new Vector2[2];
+		Vector2[] ray_vec = new Vector2[2];
+
+		offset[0] = mat.MultiplyPoint3x4(new Vector2(0, +bar_h / 2));
+		offset[1] = mat.MultiplyPoint3x4(new Vector2(0, -bar_h / 2));
+
+		ray_vec[0] = mat.MultiplyPoint3x4(new Vector2(+bar_w / 2, 0));
+		ray_vec[1] = mat.MultiplyPoint3x4(new Vector2(-bar_w / 2, 0));
+
+		// ray 確認
+		Debug.DrawRay(posCurrent + new Vector3(0, 0, 1) + (Vector3)offset[0], (Vector3)ray_vec[0], new Color(1f, 0f, 0f));
+		Debug.DrawRay(posCurrent + new Vector3(0, 0, 1) + (Vector3)offset[0], (Vector3)ray_vec[1], new Color(1f, 0f, 0f));
+		Debug.DrawRay(posCurrent + new Vector3(0, 0, 1) + (Vector3)offset[1], (Vector3)ray_vec[0], new Color(1f, 0f, 0f));
+		Debug.DrawRay(posCurrent + new Vector3(0, 0, 1) + (Vector3)offset[1], (Vector3)ray_vec[1], new Color(1f, 0f, 0f));
+
+		foreach (Vector2 o in offset)
+		{
+			foreach (Vector2 r in ray_vec)
+			{
+				RaycastHit2D hit = Physics2D.Raycast((Vector2)posCurrent + (Vector2)o, (Vector2)Vector3.Normalize(r), Vector3.Distance(r, Vector3.zero), layerBlock);
+				if (hit.collider)
+				{
+					BrokenBlock(hit.collider.gameObject);
+				}
+			}
+		}
+		
+	}
+
 
 }
