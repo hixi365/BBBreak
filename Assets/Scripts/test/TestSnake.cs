@@ -246,13 +246,13 @@ public class TestSnake : MonoBehaviour {
 				GameObject obj_l = Instantiate(prefabBlock, pos_l, Quaternion.identity, fase.transform);
 				obj_l.transform.localScale = sizePrefabBlockEye;
 				obj_l.GetComponent<SpriteRenderer>().color = colEyeBlack;
-				obj_l.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Fase");
+				obj_l.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Eye");
 
 				Vector3 pos_r = fase.transform.localPosition + new Vector3(x * sizePrefabBlockEye.x, y * sizePrefabBlockEye.y, 0f) + offset_eye_r;
 				GameObject obj_r = Instantiate(prefabBlock, pos_r, Quaternion.identity, fase.transform);
 				obj_r.transform.localScale = sizePrefabBlockEye;
 				obj_r.GetComponent<SpriteRenderer>().color = colEyeBlack;
-				obj_r.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Fase");
+				obj_r.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Eye");
 
 			}
 		}
