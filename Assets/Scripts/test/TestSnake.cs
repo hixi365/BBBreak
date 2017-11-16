@@ -11,18 +11,25 @@ public class TestSnake : MonoBehaviour {
 	// preafab
 	public GameObject prefabBlock;				// 構成するブロック 破壊可能なブロック
 	public GameObject prefabDontBreakBlock;     // 構成するブロック 破壊不可能なブロック (跳ね返す)
+	public GameObject prefabDontBreakBall;		// 構成するブロック 破壊不可能なブロック (跳ね返す)
 
 	// preafabの大きさ (指定する)
 	private Vector3 sizePrefabBlock;			// set preafab transform localScale
 	private Vector3 sizePrefabDontBreakBlock;	// set preafab transform localScale
+	private Vector3 sizePrefabDontBreakBall;    // set preafab transform localScale
+
+	private Vector3 sizePrefabBlockEye;         // set preafab transform localScale
+
 
 	// game object
-	public GameObject[] objEye;             // 目 (予告)
-	public GameObject[] objMouth;           // 口 (予告, 敵弾発射)
-	public GameObject[] objTon;				// 舌 (防御用)
+	public GameObject objFase;		// 顔
+	public GameObject[] objEye;		// 目 (予告)
+	public GameObject objMouth;		// 口 (予告, 敵弾発射)
+	public GameObject objTon;		// 舌 (防御用)
 
-	public GameObject[] objHead;			// 頭
-	public GameObject[] objBones;           // 身体
+	public GameObject objHead;		// 頭
+	public GameObject objBody;		// 身体 (子)
+	public ArrayList objBodies = new ArrayList();	// 身体 (追従してくるリスト)
 
 	// 変数
 	private int phaseMove = -1;     // 行動パターン
@@ -31,13 +38,14 @@ public class TestSnake : MonoBehaviour {
 	public Color colHead = Color.green;			// 顔の色
 	public Color colEyeWhite = Color.white;     // 目の色 白目
 	public Color colEyeBlack = Color.black;     // 目の色 黒目
+	public Color colMouth = Color.red;			// 口の色
 
 	// ブロックサイズ
 	private int size_head_w = 10;		// 頭の長方形横幅
-	private int size_head_h = 13;		// 頭の長方形縦幅
+	private int size_head_h = 13;       // 頭の長方形縦幅
 
 
-
+	private float time = 0;
 
 	private void Awake()
 	{
@@ -47,6 +55,9 @@ public class TestSnake : MonoBehaviour {
 
 		sizePrefabBlock = new Vector3(0.02f, 0.02f, 1f);
 		sizePrefabDontBreakBlock = new Vector3(0.02f, 0.02f, 1f);
+		sizePrefabDontBreakBall = new Vector3(0.5f, 0.5f, 1f);
+
+		sizePrefabBlockEye = new Vector3(0.01f, 0.02f, 1f);
 
 	}
 
@@ -59,6 +70,17 @@ public class TestSnake : MonoBehaviour {
 	
 	private void Update()
 	{
+		time += Time.deltaTime;
+
+		Vector3 v = objHead.transform.localScale;
+		v.x = v.y = Mathf.Cos(time * 2f) * 0.05f + 1f;
+		objHead.transform.localScale = v;
+
+		Vector3 p = new Vector3(0f, Mathf.Cos(time * 2f) * 0.2f, 0f);
+		objHead.transform.position = p;
+
+		// 身体の移動
+		MoveBody();
 
 	}
 
@@ -68,10 +90,24 @@ public class TestSnake : MonoBehaviour {
 
 		// 頭の生成
 		GameObject head = new GameObject("head");
-		head.transform.parent = transform;
+		head.transform.SetParent(transform, false);
 
 		CreateHead(head);
+		objHead = head;
 
+		// 顔の生成
+		GameObject fase = new GameObject("fase");
+		fase.transform.SetParent(head.transform, false);
+
+		CreateFase(fase);
+		objFase = fase;
+
+		// 身体の生成
+		GameObject body = new GameObject("body");
+		body.transform.SetParent(transform, true);
+
+		CreateBody(body);
+		objBody = body;
 
 	}
 
@@ -92,6 +128,7 @@ public class TestSnake : MonoBehaviour {
 				GameObject obj = Instantiate(prefabBlock, pos, Quaternion.identity, head.transform);
 				obj.transform.localScale = sizePrefabBlock;
 				obj.GetComponent<SpriteRenderer>().color = colHead;
+				obj.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Head");
 			}
 		}
 
@@ -106,6 +143,7 @@ public class TestSnake : MonoBehaviour {
 				GameObject obj = Instantiate(prefabBlock, pos, Quaternion.identity, head.transform);
 				obj.transform.localScale = sizePrefabBlock;
 				obj.GetComponent<SpriteRenderer>().color = colHead;
+				obj.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Head");
 			}
 
 		}
@@ -121,8 +159,107 @@ public class TestSnake : MonoBehaviour {
 				GameObject obj = Instantiate(prefabBlock, pos, Quaternion.identity, head.transform);
 				obj.transform.localScale = sizePrefabBlock;
 				obj.GetComponent<SpriteRenderer>().color = colHead;
+				obj.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Head");
 			}
 
+		}
+
+	}
+
+	private void CreateFase(GameObject fase)
+	{
+
+		// 左目
+		Vector3 offset_eye_l = new Vector3(
+			-(size_head_w / 2 - 0.5f) * sizePrefabBlock.x / 2,
+			+(size_head_h / 2 - 0.5f) * sizePrefabBlock.y / 2,
+			0f);
+
+		// 右目
+		Vector3 offset_eye_r = new Vector3(
+			+(size_head_w / 2 - 0.5f) * sizePrefabBlock.x / 2,
+			+(size_head_h / 2 - 0.5f) * sizePrefabBlock.y / 2,
+			0f);
+
+
+		// 白目
+		{
+
+			Vector3 pos_l = fase.transform.localPosition + offset_eye_l;
+			GameObject obj_l = Instantiate(prefabDontBreakBall, pos_l, Quaternion.identity, fase.transform);
+			obj_l.transform.localScale = sizePrefabDontBreakBall;
+			obj_l.GetComponent<SpriteRenderer>().color = colEyeWhite;
+			obj_l.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Fase");
+
+			Vector3 pos_r = fase.transform.localPosition + offset_eye_r;
+			GameObject obj_r = Instantiate(prefabDontBreakBall, pos_r, Quaternion.identity, fase.transform);
+			obj_r.transform.localScale = sizePrefabDontBreakBall;
+			obj_r.GetComponent<SpriteRenderer>().color = colEyeWhite;
+			obj_r.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Fase");
+
+		}
+
+		// 黒目
+		for (int y = -1; y <= 1; y++)
+		{
+			for(int x = 0; x <= 0; x++)
+			{
+
+				Vector3 pos_l = fase.transform.localPosition + new Vector3(x * sizePrefabBlockEye.x, y * sizePrefabBlockEye.y, 0f) + offset_eye_l;
+				GameObject obj_l = Instantiate(prefabBlock, pos_l, Quaternion.identity, fase.transform);
+				obj_l.transform.localScale = sizePrefabBlockEye;
+				obj_l.GetComponent<SpriteRenderer>().color = colEyeBlack;
+				obj_l.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Fase");
+
+				Vector3 pos_r = fase.transform.localPosition + new Vector3(x * sizePrefabBlockEye.x, y * sizePrefabBlockEye.y, 0f) + offset_eye_r;
+				GameObject obj_r = Instantiate(prefabBlock, pos_r, Quaternion.identity, fase.transform);
+				obj_r.transform.localScale = sizePrefabBlockEye;
+				obj_r.GetComponent<SpriteRenderer>().color = colEyeBlack;
+				obj_r.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Fase");
+
+			}
+		}
+
+	}
+
+	private void CreateBody(GameObject body)
+	{
+
+		for(int l = 0; l < 30; l++)
+		{
+
+			GameObject b = new GameObject("body " + l);
+			objBodies.Add(b);
+ 
+			b.transform.SetParent(body.transform, true);
+			b.transform.position = body.transform.position;
+
+			for (int w = -5; w <= 5; w++)
+			{
+
+				Vector3 pos = new Vector3(w * sizePrefabBlock.x, 0f, 0f);
+				GameObject obj = Instantiate(prefabBlock, pos, Quaternion.identity, b.transform);
+				obj.transform.localScale = sizePrefabBlock;
+				obj.GetComponent<SpriteRenderer>().color = l % 2 == 0 ? Color.black : Color.green;
+
+			}
+
+		}
+
+	}
+
+	private void MoveBody()
+	{
+
+		int c = objBodies.Count;
+
+		for(int i = c - 1; i >= 0; i--)
+		{
+			Transform target = i == 0 ? objHead.transform : (objBodies[i - 1] as GameObject).transform;
+			GameObject obj_current = objBodies[i] as GameObject;
+
+			obj_current.transform.position = target.position;
+			obj_current.transform.rotation = target.rotation;
 		}
 
 	}

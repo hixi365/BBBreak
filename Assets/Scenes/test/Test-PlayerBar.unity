@@ -7752,7 +7752,7 @@ MonoBehaviour:
   layerBroken:
     serializedVersion: 2
     m_Bits: 16384
-  isBarMode: 1
+  isBarMode: 0
   ySpriteAlpha1: 0.3
   ySpriteAlpha0: -0.7
   prefabItem: {fileID: 1382614763528396, guid: 6c4ffcdd450da594e93fe4b7bdc81cfb, type: 2}
@@ -7764,7 +7764,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 377812095}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1872741980}
@@ -15711,7 +15711,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &806417916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36669,6 +36669,61 @@ Transform:
   m_PrefabParentObject: {fileID: 4306018581653888, guid: 24ef5af05da73eb419ea491a0e7b49f9,
     type: 2}
   m_PrefabInternal: {fileID: 1208049595}
+--- !u!1 &1945082573
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1945082575}
+  - component: {fileID: 1945082574}
+  m_Layer: 0
+  m_Name: Test Snake
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1945082574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1945082573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55667620ee87b2a4ebfefba643b7294c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabBlock: {fileID: 1549150498760860, guid: 24ef5af05da73eb419ea491a0e7b49f9,
+    type: 2}
+  prefabDontBreakBlock: {fileID: 1549150498760860, guid: abb0d7898fb046e44b42298960f652a9,
+    type: 2}
+  prefabDontBreakBall: {fileID: 1549150498760860, guid: abb0d7898fb046e44b42298960f652a9,
+    type: 2}
+  objFase: {fileID: 0}
+  objEye: []
+  objMouth: {fileID: 0}
+  objTon: {fileID: 0}
+  objHead: {fileID: 0}
+  colHead: {r: 0, g: 1, b: 0, a: 1}
+  colEyeWhite: {r: 1, g: 1, b: 1, a: 1}
+  colEyeBlack: {r: 0, g: 0, b: 0, a: 1}
+  colMouth: {r: 1, g: 0, b: 0, a: 1}
+--- !u!4 &1945082575
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1945082573}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1954079772
 Prefab:
   m_ObjectHideFlags: 0
