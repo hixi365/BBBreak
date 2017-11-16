@@ -249,6 +249,9 @@ public class Test_ShotMove : MonoBehaviour {
 	private void RaycastBar()
 	{
 
+		if (isBarMode == false)
+			return;
+
 		float bar_w = objBar.transform.lossyScale.x;
 		float bar_h = objBar.transform.lossyScale.y;
 
