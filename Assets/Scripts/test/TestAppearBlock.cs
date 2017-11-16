@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class TestAppearBlock : MonoBehaviour {
 
-
+	public float delay = 0f;		// 遅延時間
 	public float timeMove = 1f; // 移動に掛かる時間
 
 	public Vector3 fromPos;		// 開始座標
@@ -39,10 +39,23 @@ public class TestAppearBlock : MonoBehaviour {
 			renderer.color = col;
 		}
 
+		if(delay > 0f)
+		{
+			Color col = renderer.color;
+			col.a = 0f;
+			renderer.color = col;
+		}
+
 	}
 
 	private void Update()
 	{
+
+		if(delay > 0f)
+		{
+			delay -= Time.deltaTime;
+			return;
+		}
 
 		time += Time.deltaTime;
 

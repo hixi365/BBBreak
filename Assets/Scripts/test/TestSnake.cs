@@ -253,7 +253,7 @@ public class TestSnake : MonoBehaviour {
 				GameObject obj = Instantiate(prefabBlock, pos, Quaternion.identity, b.transform);
 				obj.transform.localScale = sizePrefabBlock;
 				obj.GetComponent<SpriteRenderer>().color = l % 2 == 0 ? Color.black : Color.green;
-				AddRandomAppear(obj);
+				AddRandomAppear(obj, l * 0.2f);
 			}
 
 		}
@@ -295,7 +295,7 @@ public class TestSnake : MonoBehaviour {
 
 	}
 
-	private void AddRandomAppear(GameObject obj)
+	private void AddRandomAppear(GameObject obj, float delay = 0f)
 	{
 
 		TestAppearBlock appear = obj.AddComponent<TestAppearBlock>();
@@ -312,6 +312,8 @@ public class TestSnake : MonoBehaviour {
 
 		appear.toPos = appear.transform.localPosition;
 		appear.toRot = appear.transform.localRotation.eulerAngles;
+
+		appear.delay = delay;
 
 	}
 
