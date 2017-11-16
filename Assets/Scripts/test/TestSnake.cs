@@ -34,6 +34,9 @@ public class TestSnake : MonoBehaviour {
 	// 変数
 	private int phaseMove = -1;     // 行動パターン
 
+	public Vector3 vecMove;			// 移動速度
+	public Vector3 posCurrent;      // 現在の座標
+
 	// 色
 	public Color colHead = Color.green;			// 顔の色
 	public Color colEyeWhite = Color.white;     // 目の色 白目
@@ -66,6 +69,9 @@ public class TestSnake : MonoBehaviour {
 
 		CreateSnake();
 
+		posCurrent = new Vector3();
+		vecMove = new Vector3();
+
 	}
 	
 	private void Update()
@@ -76,8 +82,11 @@ public class TestSnake : MonoBehaviour {
 		v.x = v.y = Mathf.Cos(time * 2f) * 0.05f + 1f;
 		objHead.transform.localScale = v;
 
-		Vector3 p = new Vector3(0f, Mathf.Cos(time * 2f) * 0.2f, 0f);
-		objHead.transform.position = p;
+		//Vector3 p = new Vector3(0f, Mathf.Cos(time * 2f) * 0.2f, 0f);
+		//objHead.transform.position = p;
+
+		// 頭の移動
+		MoveHead();
 
 		// 身体の移動
 		MoveBody();
@@ -129,6 +138,7 @@ public class TestSnake : MonoBehaviour {
 				obj.transform.localScale = sizePrefabBlock;
 				obj.GetComponent<SpriteRenderer>().color = colHead;
 				obj.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Head");
+				AddRandomAppear(obj);
 			}
 		}
 
@@ -144,6 +154,7 @@ public class TestSnake : MonoBehaviour {
 				obj.transform.localScale = sizePrefabBlock;
 				obj.GetComponent<SpriteRenderer>().color = colHead;
 				obj.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Head");
+				AddRandomAppear(obj);
 			}
 
 		}
@@ -160,6 +171,7 @@ public class TestSnake : MonoBehaviour {
 				obj.transform.localScale = sizePrefabBlock;
 				obj.GetComponent<SpriteRenderer>().color = colHead;
 				obj.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Head");
+				AddRandomAppear(obj);
 			}
 
 		}
@@ -241,7 +253,7 @@ public class TestSnake : MonoBehaviour {
 				GameObject obj = Instantiate(prefabBlock, pos, Quaternion.identity, b.transform);
 				obj.transform.localScale = sizePrefabBlock;
 				obj.GetComponent<SpriteRenderer>().color = l % 2 == 0 ? Color.black : Color.green;
-
+				AddRandomAppear(obj);
 			}
 
 		}
@@ -251,16 +263,55 @@ public class TestSnake : MonoBehaviour {
 	private void MoveBody()
 	{
 
+		if (objBodies.Count == 0)
+			return;
+
+		if (Vector3.Distance((objBodies[0] as GameObject).transform.position, objHead.transform.position) < sizePrefabBlock.x)
+			return;
+
 		int c = objBodies.Count;
 
 		for(int i = c - 1; i >= 0; i--)
 		{
 			Transform target = i == 0 ? objHead.transform : (objBodies[i - 1] as GameObject).transform;
 			GameObject obj_current = objBodies[i] as GameObject;
-
-			obj_current.transform.position = target.position;
-			obj_current.transform.rotation = target.rotation;
+			
+			obj_current.transform.position = Vector3.Lerp(obj_current.transform.position, target.position, 0.3f);
+			obj_current.transform.rotation = Quaternion.Lerp(obj_current.transform.rotation, target.rotation, 0.3f);
 		}
+
+	}
+
+	private void MoveHead()
+	{
+
+		Vector3 vec = new Vector3(Mathf.Cos(time / 2), Mathf.Sin(time / 2), 0f) * 0.1f;
+		vecMove = vec;
+
+		posCurrent += vecMove * Time.deltaTime;
+
+		objHead.transform.position = posCurrent;
+		objHead.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(-vec.x, vec.y) * Mathf.Rad2Deg);
+
+	}
+
+	private void AddRandomAppear(GameObject obj)
+	{
+
+		TestAppearBlock appear = obj.AddComponent<TestAppearBlock>();
+
+		float a = Random.Range(0, 2 * Mathf.PI);
+		float rad = 1.0f;
+		float roll = Random.Range(-Mathf.PI, +Mathf.PI) * 3f;
+
+		Vector3 offsetPos = new Vector3(Mathf.Cos(a), Mathf.Sin(a), 0f) * rad;
+		Vector3 offsetRot = new Vector3(0f, 0f, roll);
+
+		appear.fromPos = appear.transform.localPosition - offsetPos;
+		appear.fromRot = appear.transform.localRotation.eulerAngles - offsetRot;
+
+		appear.toPos = appear.transform.localPosition;
+		appear.toRot = appear.transform.localRotation.eulerAngles;
 
 	}
 
