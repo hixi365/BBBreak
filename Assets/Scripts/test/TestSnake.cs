@@ -11,7 +11,9 @@ public class TestSnake : MonoBehaviour {
 	// preafab
 	public GameObject prefabBlock;				// 構成するブロック 破壊可能なブロック
 	public GameObject prefabDontBreakBlock;     // 構成するブロック 破壊不可能なブロック (跳ね返す)
-	public GameObject prefabDontBreakBall;		// 構成するブロック 破壊不可能なブロック (跳ね返す)
+	public GameObject prefabDontBreakBall;      // 構成するブロック 破壊不可能なブロック (跳ね返す)
+
+	public GameObject prefabEnemyShot;			// 敵弾
 
 	// preafabの大きさ (指定する)
 	private Vector3 sizePrefabBlock;			// set preafab transform localScale
@@ -49,13 +51,12 @@ public class TestSnake : MonoBehaviour {
 
 
 	private float time = 0;
+	private float timeTestShot = 0;
 
 	private void Awake()
 	{
 
-		//	sizePrefabBlock = prefabBlock.transform.localScale;
-		//	sizePrefabDontBreakBlock = prefabDontBreakBlock.transform.localScale;
-
+		// 大きさの初期化 (本来はinspectorで)
 		sizePrefabBlock = new Vector3(0.02f, 0.02f, 1f);
 		sizePrefabDontBreakBlock = new Vector3(0.02f, 0.02f, 1f);
 		sizePrefabDontBreakBall = new Vector3(0.5f, 0.5f, 1f);
@@ -84,6 +85,30 @@ public class TestSnake : MonoBehaviour {
 
 		//Vector3 p = new Vector3(0f, Mathf.Cos(time * 2f) * 0.2f, 0f);
 		//objHead.transform.position = p;
+
+		// テスト弾発射
+		timeTestShot += Time.deltaTime;
+		if(timeTestShot > 3f)
+		{
+
+			float base_angle = - Mathf.PI / 2 + Random.Range(-1, 1) * Mathf.PI / 8;
+
+			for(int i = 0; i < 10; i++)
+			{
+
+				float angle = base_angle + i * 0.01f;
+				
+				Vector3 pos = objHead.transform.localPosition;
+				GameObject obj = Instantiate(prefabEnemyShot, pos, Quaternion.identity);
+				obj.transform.SetParent(transform, true);
+				TestEnemyShot shot = obj.GetComponent<TestEnemyShot>();
+				shot.vecMove = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * 0.5f;
+				shot.delay = i * 0.03f;
+			}
+
+			timeTestShot = 0f;
+
+		}
 
 		// 頭の移動
 		MoveHead();

@@ -29,7 +29,9 @@ public class TestEnemyShot : MonoBehaviour {
 	public float alphaMin = 0f;			// アニメーション α値 最小
 
 	public float intervalBlink = 1f;    // スプライト点滅間隔
-	private float time = 0f;			// 累積時間
+	private float time = 0f;            // 累積時間
+
+	public float delay = 0f;			// ディレイ (別スクリプトにするべき)
 
 	private void Awake()
 	{
@@ -49,16 +51,30 @@ public class TestEnemyShot : MonoBehaviour {
 		posCurrent = transform.localPosition;
 		angleCurrent = transform.localRotation.eulerAngles.z;
 
-		float angle = -Mathf.PI / 2; // Random.Range(0, Mathf.PI * 2);
-		Vector3 speed = 1.0f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
-		vecMove = speed;
+	//	float angle = -Mathf.PI / 2; // Random.Range(0, Mathf.PI * 2);
+	//	Vector3 speed = 1.0f * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
+	//	vecMove = speed;
 
 		angleRoll = 0f;
+
+		// delay
+		if (delay > 0f)
+		{
+			renderer.enabled = false;
+		}
 
 	}
 
 	private void Update()
 	{
+
+		// delay
+		if(delay > 0f)
+		{
+			delay -= Time.deltaTime;
+			return;
+		}
+		renderer.enabled = true;
 
 		time += Time.deltaTime;
 
