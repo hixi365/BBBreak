@@ -14,7 +14,9 @@ public class Test_ShotMove : MonoBehaviour {
 	public float angleCurrent;      // z軸回転 transformへ書き込む
 
 	public GameObject objCircle;	// 中央の円
-	public GameObject objBar;		// 棒
+	public GameObject objBar;       // 棒
+
+	public GameObject[] objMissActive;	// ミスした際に、すべて有効にする
 
 	public LayerMask layerRefrect;  // 反射するレイヤータグ
 	public LayerMask layerPlayer;   // プレイヤーレイヤータグ
@@ -129,6 +131,7 @@ public class Test_ShotMove : MonoBehaviour {
 			// ミス扱い
 			if (1 << c.collider.gameObject.layer == layerFailed.value)
 			{
+				OnMissActive();
 				Destroy(gameObject);
 				return;
 			}
@@ -286,6 +289,15 @@ public class Test_ShotMove : MonoBehaviour {
 			}
 		}
 		
+	}
+
+	// ミスした際にアクティブにするオブジェクト
+	private void OnMissActive()
+	{
+
+		foreach (GameObject obj in objMissActive)
+			obj.SetActive(true);
+
 	}
 
 
