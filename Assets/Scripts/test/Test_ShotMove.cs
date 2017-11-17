@@ -100,7 +100,8 @@ public class Test_ShotMove : MonoBehaviour {
 		//	Debug.DrawRay((Vector3)(pos + offset[4]) + new Vector3(0, 0, 1), vec_n * vec_power, new Color(1f, 0f, 0f));
 
 			RaycastHit2D[] c_hit = new RaycastHit2D[5];
-			for(int i = 0; i < 5; i++)
+			for (int i = 0; i < 5; i++)
+			//	c_hit[i] = Collider.Raycast();
 				c_hit[i] = Physics2D.Raycast(pos + offset[i], vec_n, vec_power, layerRefrect + layerPlayer + layerFailed + layerBlock);
 
 			// 衝突
