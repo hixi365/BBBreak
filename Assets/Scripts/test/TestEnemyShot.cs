@@ -31,7 +31,10 @@ public class TestEnemyShot : MonoBehaviour {
 	public float intervalBlink = 1f;    // スプライト点滅間隔
 	private float time = 0f;            // 累積時間
 
-	public float delay = 0f;			// ディレイ (別スクリプトにするべき)
+	public float delay = 0f;            // ディレイ (別スクリプトにするべき)
+
+	public Color colorEnemy = Color.red;		// 敵弾の時の色
+	public Color colorRefrect = Color.yellow;	// 跳ね返した時の色
 
 	private void Awake()
 	{
@@ -56,6 +59,8 @@ public class TestEnemyShot : MonoBehaviour {
 	//	vecMove = speed;
 
 		angleRoll = 0f;
+
+		renderer.color = colorEnemy;
 
 		// delay
 		if (delay > 0f)
@@ -185,6 +190,7 @@ public class TestEnemyShot : MonoBehaviour {
 				angleRoll = -angle * 1000f;
 
 				isPlayer = true;
+				renderer.color = colorRefrect;
 
 			}
 

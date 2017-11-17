@@ -5,6 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/test/Test-PlayerBar.unity
+    guid: bc19e888fa346c44bbe22f5f149355da
+  - enabled: 1
+    path: Assets/Scenes/test/Test-Game.unity
     guid: 00000000000000000000000000000000

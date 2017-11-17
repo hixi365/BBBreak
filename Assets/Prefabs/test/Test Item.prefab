@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4343614896846080}
   - component: {fileID: 212295633328772788}
   - component: {fileID: 58282476240601008}
+  - component: {fileID: 114370581878199768}
   m_Layer: 12
   m_Name: Test Item
   m_TagString: Untagged
@@ -56,6 +57,39 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
+--- !u!114 &114370581878199768
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1382614763528396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1e178b23a699ca4faddd2a089d4e4cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vecMove: {x: 0, y: -0.5, z: 0}
+  angleRoll: 0
+  angleCurrent: 0
+  layerRefrect:
+    serializedVersion: 2
+    m_Bits: 256
+  layerPlayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  layerFailed:
+    serializedVersion: 2
+    m_Bits: 512
+  layerBlock:
+    serializedVersion: 2
+    m_Bits: 2048
+  layerBroken:
+    serializedVersion: 2
+    m_Bits: 16384
+  alphaMax: 1
+  alphaMin: 0
+  intervalBlink: 1
+  delay: 0
 --- !u!212 &212295633328772788
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -89,7 +123,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.5441177, b: 0.5441177, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
