@@ -25676,6 +25676,52 @@ MonoBehaviour:
   toRot: {x: 0, y: 0, z: 0}
   fromAlpha: 0
   toAlpha: 1
+--- !u!1 &1328258413
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1328258415}
+  - component: {fileID: 1328258414}
+  m_Layer: 0
+  m_Name: TestSpiral
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1328258414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1328258413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50f382f20ef0b7a479b5ba1147aecc71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabBlock: {fileID: 1549150498760860, guid: 24ef5af05da73eb419ea491a0e7b49f9,
+    type: 2}
+  vecMove: {x: 0, y: 0, z: 0}
+  posCurrent: {x: 0, y: 0, z: 0}
+  colIn: {r: 0, g: 0.6689658, b: 1, a: 1}
+  colOut: {r: 0, g: 0.99264705, b: 0.41759628, a: 1}
+--- !u!4 &1328258415
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1328258413}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1329895854 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4306018581653888, guid: 24ef5af05da73eb419ea491a0e7b49f9,
