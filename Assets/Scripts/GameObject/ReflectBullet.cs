@@ -53,18 +53,19 @@ public class ReflectBullet : MonoBehaviour {
     // private
     private SpriteRenderer rendererOwn; // 自身のスプライトレンダラ
 	private int layerSetBroken;         // 破壊済ブロックレイヤー (書き込み用)
-    private float pixelsSprite;           // スプライトの大きさ
+    [SerializeField]
+
+	private float pixelsSprite;           // スプライトの大きさ
 
 	private void Awake()
 	{
 
         // レンダラの取得
 		rendererOwn = gameObject.GetComponent<SpriteRenderer>();
-        UpdateSpriteColor();
-        SpritePixelSize();
+		SpritePixelSize();
 
-        // 破壊済みブロックに書き込むレイヤ値の計算
-        layerSetBroken = 0;
+		// 破壊済みブロックに書き込むレイヤ値の計算
+		layerSetBroken = 0;
 		int l = layerBroken;
         while (0 < (l >>= 1))
         {
@@ -78,13 +79,16 @@ public class ReflectBullet : MonoBehaviour {
 		// NONEの場合 ランダムで初期化
 		if (stateShot == ShotState.NONE)
 		{
-			SetNoneShot();
+			SetRandomMoveVec();
 		}
 
 	}
 
     private void Start()
 	{
+
+		// 弾色の初回更新
+		UpdateSpriteColor();
 
 	}
 
@@ -165,41 +169,73 @@ public class ReflectBullet : MonoBehaviour {
 
     }
 
+	// 弾速ベクトルと回転速度の代入
+	private void SetMoveVecAndRoll(Vector3 vecMove, float zRoll)
+	{
+
+		this.vecMove = vecMove;
+		angleRoll = zRoll;
+
+	}
+
     // ランダムにNONE弾の生成 (テスト用)
-    public void SetNoneShot()
+    public void SetNoneShot(Vector3 vecMove, float zRoll)
     {
 
-        float angle = Random.Range(0f, Mathf.PI * 2);
-        Vector3 vec = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
+		stateShot = ShotState.NONE;
 
-        vecMove = vec;
+		SetMoveVecAndRoll(vecMove, zRoll);
 
-    }
+	}
 
     // 敵弾の生成
     public void SetEnemyShot(Vector3 vecMove, float zRoll)
     {
 
-        this.vecMove = vecMove;
-        angleRoll = zRoll;
+		stateShot = ShotState.ENEMY;
 
-        stateShot = ShotState.ENEMY;
+		SetMoveVecAndRoll(vecMove, zRoll);
 
-    }
+	}
 
-    // 自弾の生成
-    public void SetPlayerShot(Vector3 vecMove, float zRoll)
+	// 自弾の生成
+	public void SetPlayerShot(Vector3 vecMove, float zRoll)
     {
-
-        this.vecMove = vecMove;
-        angleRoll = zRoll;
 
         stateShot = ShotState.PLAYER;
 
-    }
+		SetMoveVecAndRoll(vecMove, zRoll);
 
-    // 移動
-    private void RaycastMove()
+	}
+
+	// 自弾状態へ更新
+	private void ToPlayerShot()
+	{
+
+		// 敵弾であれば自弾へ変更
+		if (stateShot == ShotState.ENEMY)
+		{
+
+			stateShot = ShotState.PLAYER;
+			UpdateSpriteColor();
+
+		}
+
+	}
+
+	// ランダムな移動方向で弾速ベクトルを決定する
+	public void SetRandomMoveVec(float speed = 1f)
+	{
+
+		float angle = Random.Range(0f, Mathf.PI * 2);
+		Vector3 vec = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * speed;
+
+		vecMove = vec;
+
+	}
+
+	// 移動
+	private void RaycastMove()
 	{
 
 		float circle_r = gameObject.transform.lossyScale.x * 2 / (pixelsSprite/ 2);
@@ -301,6 +337,7 @@ public class ReflectBullet : MonoBehaviour {
 		{
 			
 			new_n_vec = PlayerRefrect(c);
+			ToPlayerShot();
 
 		}
 
