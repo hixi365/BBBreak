@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212730101562284826}
   - component: {fileID: 58257529657468468}
   - component: {fileID: 114230414796624276}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: Test Enemy Shot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,6 +93,9 @@ MonoBehaviour:
   alphaMax: 0.8
   alphaMin: 0.3
   intervalBlink: 0.2
+  delay: 0
+  colorEnemy: {r: 1, g: 0, b: 0, a: 1}
+  colorRefrect: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!212 &212730101562284826
 SpriteRenderer:
   m_ObjectHideFlags: 1

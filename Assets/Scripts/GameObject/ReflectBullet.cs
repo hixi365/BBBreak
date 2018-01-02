@@ -30,15 +30,17 @@ public class ReflectBullet : MonoBehaviour {
 
     // SerializeField layer
     [SerializeField]
-    private LayerMask layerRefrect; // 反射するレイヤータグ
+    private LayerMask layerRefrect;		// 反射するレイヤータグ
 	[SerializeField]
-    private LayerMask layerPlayer;  // プレイヤーレイヤータグ
+    private LayerMask layerPlayer;		// プレイヤーレイヤータグ
 	[SerializeField]
-    private LayerMask layerFailed;  // ミスするレイヤータグ
+    private LayerMask layerFailed;		// ミスするレイヤータグ
 	[SerializeField]
-    private LayerMask layerBlock;   // ブロックレイヤータグ
+    private LayerMask layerBlock;		// ブロックレイヤータグ
 	[SerializeField]
-    private LayerMask layerBroken;  // 破壊済ブロックレイヤータグ
+	private LayerMask layerLifeBlock;   // ライフブロックレイヤータグ
+	[SerializeField]
+	private LayerMask layerBroken;		// 破壊済ブロックレイヤータグ
 
     // SerializeField color
     [SerializeField]
@@ -287,7 +289,7 @@ public class ReflectBullet : MonoBehaviour {
 		Debug.DrawRay((Vector3)(pos + offset[4]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
 
 		// 衝突対象
-		LayerMask collisionLayer = layerRefrect + layerFailed + layerPlayer;
+		LayerMask collisionLayer = layerRefrect + layerFailed + layerLifeBlock + layerPlayer;
 
 		// プレイヤー弾 敵のブロックに衝突
 		if(stateShot == ShotState.PLAYER || stateShot == ShotState.EX_PLAYER)
@@ -325,7 +327,7 @@ public class ReflectBullet : MonoBehaviour {
 		Vector2 new_n_vec = n_vec;
 
 		// 衝突対象が壁であれば反射
-		if(1 << c.collider.gameObject.layer == layerRefrect.value)
+		if (1 << c.collider.gameObject.layer == layerRefrect.value)
 		{
 
 			new_n_vec = DefaultRefrect(c, n_vec);
@@ -335,7 +337,7 @@ public class ReflectBullet : MonoBehaviour {
 		// プレイヤーであれば角度を当たった位置で変更 (側面は端に当たったとして前方に飛ばす)
 		else if (1 << c.collider.gameObject.layer == layerPlayer.value)
 		{
-			
+
 			new_n_vec = PlayerRefrect(c);
 			ToPlayerShot();
 
@@ -350,12 +352,36 @@ public class ReflectBullet : MonoBehaviour {
 			// 通常弾であれば反射
 			// EX弾であれば反射しない
 
-			if(stateShot == ShotState.PLAYER)
+			if (stateShot == ShotState.PLAYER)
 			{
 
 				new_n_vec = DefaultRefrect(c, n_vec);
 
 			}
+
+		}
+
+		// ライフブロックであれば衝突通知を行うか判定し、自身を削除
+		else if (1 << c.collider.gameObject.layer == layerLifeBlock.value)
+		{
+
+			// 敵弾であればライフブロックに通知
+			if(stateShot == ShotState.ENEMY)
+			{
+
+				LifePointBlock lifeBlock = c.collider.gameObject.GetComponent<LifePointBlock>();
+				
+				if(lifeBlock != null)
+				{
+
+					lifeBlock.OnHit();
+
+				}
+
+			}
+
+			Destroy(gameObject);
+			return false;
 
 		}
 

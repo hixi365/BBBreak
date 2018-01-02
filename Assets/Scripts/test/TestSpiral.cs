@@ -85,7 +85,7 @@ public class TestSpiral : MonoBehaviour {
                 GameObject obj = Instantiate(prefabBlock, pos, Quaternion.identity, transform);
                 obj.transform.localScale = sizePrefabBlock;
                 obj.GetComponent<SpriteRenderer>().color = col;
-                obj.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Head");
+                obj.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Default");
                 AddRandomAppear(obj);
 
             }

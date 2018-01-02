@@ -57,18 +57,21 @@ MonoBehaviour:
     m_Bits: 256
   layerPlayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 2048
   layerFailed:
     serializedVersion: 2
     m_Bits: 512
   layerBlock:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 4096
+  layerLifeBlock:
+    serializedVersion: 2
+    m_Bits: 1024
   layerBroken:
     serializedVersion: 2
-    m_Bits: 16384
+    m_Bits: 32768
   colorEnemys: {r: 1, g: 0, b: 0, a: 1}
-  colorPlayers: {r: 0.15862082, g: 1, b: 0, a: 1}
+  colorPlayers: {r: 0.15862082, g: 1, b: 0, a: 0.60784316}
   degMaxPlayerRefrect: 45
   pixelsSprite: 0
 --- !u!212 &212620136972992694
@@ -102,7 +105,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
