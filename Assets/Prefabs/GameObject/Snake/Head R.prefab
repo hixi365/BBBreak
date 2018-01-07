@@ -130,7 +130,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4312837493506416}
   - component: {fileID: 212166778518200832}
-  m_Layer: 0
+  - component: {fileID: 58012954282732672}
+  m_Layer: 12
   m_Name: Head Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,6 +249,21 @@ Transform:
   m_Father: {fileID: 4842900779968722}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &58012954282732672
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1797426086660048}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.3
 --- !u!114 &114678378445001146
 MonoBehaviour:
   m_ObjectHideFlags: 1

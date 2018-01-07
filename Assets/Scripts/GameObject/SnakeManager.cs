@@ -239,6 +239,15 @@ public class SnakeManager : MonoBehaviour {
 	private void UpdateDestroyBlock()
 	{
 
+		// 頭に直撃した場合破壊
+		if(objHeadObject.layer == layerValueBroken)
+		{
+
+			Destroy(gameObject);
+			return;
+
+		}
+
 		int countDestroy = 0;
 
 		foreach(GameObject obj in listBody)
@@ -264,6 +273,15 @@ public class SnakeManager : MonoBehaviour {
 
 		listBody.RemoveRange(listBody.Count - countDestroy, countDestroy);
 		currentLength = listBody.Count;
+
+		// 長さが1以下の時破壊
+		if(currentLength <= 1)
+		{
+
+			Destroy(gameObject);
+			return;
+
+		}
 
 	}
 
