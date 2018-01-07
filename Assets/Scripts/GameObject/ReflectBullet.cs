@@ -54,7 +54,7 @@ public class ReflectBullet : MonoBehaviour {
 
     // private
     private SpriteRenderer rendererOwn; // 自身のスプライトレンダラ
-	private int layerSetBroken;         // 破壊済ブロックレイヤー (書き込み用)
+	private int layerValueBroken;        // 破壊済ブロックレイヤー (書き込み用)
     [SerializeField]
 
 	private float pixelsSprite;           // スプライトの大きさ
@@ -67,11 +67,11 @@ public class ReflectBullet : MonoBehaviour {
 		SpritePixelSize();
 
 		// 破壊済みブロックに書き込むレイヤ値の計算
-		layerSetBroken = 0;
+		layerValueBroken = 0;
 		int l = layerBroken;
         while (0 < (l >>= 1))
         {
-            layerSetBroken++;
+			layerValueBroken++;
         }
 
         // transformの取得
@@ -281,12 +281,12 @@ public class ReflectBullet : MonoBehaviour {
 		offset[(int)RaycastOffset.R45] =
             (offset[(int)RaycastOffset.CENTER] + offset[(int)RaycastOffset.R90]) / 2;                   // raycast offset (45度)
 
-		// ray 確認
-		Debug.DrawRay((Vector3)(pos + offset[0]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
-		Debug.DrawRay((Vector3)(pos + offset[1]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
-		Debug.DrawRay((Vector3)(pos + offset[2]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
-		Debug.DrawRay((Vector3)(pos + offset[3]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
-		Debug.DrawRay((Vector3)(pos + offset[4]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
+		//// ray 確認
+		//Debug.DrawRay((Vector3)(pos + offset[0]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
+		//Debug.DrawRay((Vector3)(pos + offset[1]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
+		//Debug.DrawRay((Vector3)(pos + offset[2]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
+		//Debug.DrawRay((Vector3)(pos + offset[3]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
+		//Debug.DrawRay((Vector3)(pos + offset[4]) + new Vector3(0, 0, 1), n_vec * power, new Color(1f, 0f, 0f));
 
 		// 衝突対象
 		LayerMask collisionLayer = layerRefrect + layerFailed + layerLifeBlock + layerPlayer;
@@ -445,7 +445,7 @@ public class ReflectBullet : MonoBehaviour {
     private void BrokenBlock(GameObject block)
 	{
 
-		block.layer = layerSetBroken;
+		block.layer = layerValueBroken;
 
 	}
 

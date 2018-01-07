@@ -13645,22 +13645,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabHead: {fileID: 1424448162083998, guid: 13982f07a0d9a0541932af48fb8c88db, type: 2}
-  prefabBody: {fileID: 1871727062883138, guid: 19fd130b46535a94fa5e592054a92e1c, type: 2}
+  prefabBody: {fileID: 1767211820672554, guid: a1f5901caa0cf254093fc69e4670cc76, type: 2}
+  layerBlock:
+    serializedVersion: 2
+    m_Bits: 0
+  layerBroken:
+    serializedVersion: 2
+    m_Bits: 0
   lengthBody: 5
   intervalBodytoBody: 0.002
+  angleMove: 0
+  speedMove: 0
 --- !u!4 &662903747
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 662903745}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 20
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &664386060
 Prefab:
   m_ObjectHideFlags: 0
@@ -26013,7 +26021,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1328258414
 MonoBehaviour:
   m_ObjectHideFlags: 0
