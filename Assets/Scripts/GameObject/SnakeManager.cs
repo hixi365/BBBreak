@@ -75,17 +75,18 @@ public class SnakeManager : MonoBehaviour {
 		// 頭の生成
 		Vector2 pos = transform.position;
 		float angle = transform.rotation.eulerAngles.z;
+		Vector2 vecInterval = new Vector2(Mathf.Sin(angle * Mathf.Deg2Rad), Mathf.Cos(angle * Mathf.Deg2Rad));
 
 		objHead = Instantiate(prefabHead, (Vector3)pos, Quaternion.Euler(0f, 0f, angle), transform);
 		GameObject objHeadObject = objHead.transform.GetChild(0).gameObject;
 
 		if(objHeadObject != null)
 		{
-			pos.y -= objHeadObject.transform.lossyScale.y / 2;
+			pos += vecInterval * objHeadObject.transform.lossyScale.y / 2;
 		}
 		else
 		{ 
-			pos.y -= objHead.transform.lossyScale.y / 2;
+			pos += vecInterval * objHead.transform.lossyScale.y / 2;
 		}
 		
 		// 胴の生成
@@ -99,14 +100,14 @@ public class SnakeManager : MonoBehaviour {
 			if(i == 0)
 			{
 
-				pos.y -= prefabBody.transform.lossyScale.y / 2;
-				pos.y -= intervalBodytoBody;
+				pos += vecInterval * prefabBody.transform.lossyScale.y / 2;
+				pos += vecInterval * intervalBodytoBody;
 
 			}
 
 			GameObject o = Instantiate(prefabBody, (Vector3)pos, Quaternion.Euler(0f, 0f, angle), parentBody.transform);
-			pos.y -= o.transform.lossyScale.y + intervalBodytoBody;
-			pos.y -= intervalBodytoBody;
+			pos += vecInterval * o.transform.lossyScale.y;
+			pos += vecInterval * intervalBodytoBody;
 
 		}
 
