@@ -7,6 +7,15 @@ using UnityEngine;
 
 public class SnakeManager : MonoBehaviour {
 
+	// 壁面での操作
+	//  NONE      未指定 (何もしない)
+	//  REFLECT   即座に反射する
+	//  DELETE    削除する
+	enum MoveAreaState { NONE, REFLECT, DELETE };
+
+	[SerializeField]
+	private MoveAreaState stateMoveArea = MoveAreaState.NONE;
+
 	// prefab
 	[SerializeField]
 	private GameObject prefabHead;
@@ -36,6 +45,16 @@ public class SnakeManager : MonoBehaviour {
 
 	// 生成した胴の長さ
 	private float scaleBody;
+
+	// 壁面
+	[SerializeField]
+	private float minXReflect;
+	[SerializeField]
+	private float maxXReflect;
+	[SerializeField]
+	private float minYReflect;
+	[SerializeField]
+	private float maxYReflect;
 
 	// 移動パラメータ
 	[SerializeField]
@@ -101,6 +120,7 @@ public class SnakeManager : MonoBehaviour {
 	{
 
 		UpdateDestroyBlock();
+		ReflectSnake();
 		MoveSnake();
 
 	}
@@ -134,11 +154,11 @@ public class SnakeManager : MonoBehaviour {
 		wposBufBody = new Vector2[lengthBody];
 		angleBufBody = new float[lengthBody];
 
-		// 頭の生成
 		Vector2 pos = transform.position;
 		float angle = transform.rotation.eulerAngles.z;
-		Vector2 vecInterval = - new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
+		Vector2 vecInterval = -new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * transform.localScale.x;
 		
+		// 頭の生成
 		objHead = Instantiate(prefabHead, (Vector3)pos, Quaternion.Euler(0f, 0f, angle), transform);
 		GameObject objHeadObject = objHead.transform.GetChild(0).gameObject;
 
@@ -160,18 +180,19 @@ public class SnakeManager : MonoBehaviour {
 		// 胴の生成
 		objParentBody = new GameObject("Bodies");
 		objParentBody.transform.parent = transform;
+		objParentBody.transform.localScale = new Vector3(1f, 1f, 1f);
 
-		for(int i = 0; i < lengthBody; i++)
+		for (int i = 0; i < lengthBody; i++)
 		{
 
 			// 0回目のときだけ、自身の大きさの半分ずらす
 			if(i == 0)
 			{
 
-				scaleBody = prefabBody.transform.lossyScale.y;
+				scaleBody = prefabBody.transform.lossyScale.y * transform.localScale.x;
 
-				pos += vecInterval * scaleBody / 2;
-				pos += vecInterval * intervalBodytoBody;
+			//	pos += vecInterval * scaleBody / 2;
+			//	pos += vecInterval * intervalBodytoBody;
 
 			}
 
@@ -181,13 +202,13 @@ public class SnakeManager : MonoBehaviour {
 			wposBody[i] = pos;
 			angleBody[i] = angle * Mathf.Deg2Rad;
 
-			pos += vecInterval * scaleBody;
+			pos += vecInterval * scaleBody / 2;
 			pos += vecInterval * intervalBodytoBody;
 
 		}
 
 		angleMove = angleHead;
-		speedMove = 0f;
+	//	speedMove = 0f;
 
 	}
 
@@ -231,7 +252,7 @@ public class SnakeManager : MonoBehaviour {
 			moveRate -= rate;
 
 			// 頭の移動
-			wposBufHead = wposHead + rate * scaleBody * new Vector2(Mathf.Cos(angleMove), Mathf.Sin(angleMove));
+			wposBufHead = wposHead + rate * (scaleBody + intervalBodytoBody) * new Vector2(Mathf.Cos(angleMove), Mathf.Sin(angleMove));
 			angleBufHead = angleMove;
 
 			Debug.DrawRay((Vector3)(wposBufHead) + new Vector3(0, 0, 1), Vector3.up * scaleBody, new Color(1f, 0f, 0f));
@@ -298,6 +319,92 @@ public class SnakeManager : MonoBehaviour {
 			obj.transform.rotation = Quaternion.Euler(0f, 0f, angleBody[i] * Mathf.Rad2Deg);
 
 		}
+
+	}
+
+	// 壁面設定時の動作
+	private void ReflectSnake()
+	{
+
+		// 未動作
+		if(stateMoveArea == MoveAreaState.NONE)
+		{
+
+			return;
+
+		}
+
+		Vector2 vec = new Vector2(Mathf.Cos(angleMove), Mathf.Sin(angleMove));
+
+		if(wposHead.x > maxXReflect)
+		{
+
+			if(stateMoveArea == MoveAreaState.DELETE)
+			{
+				Destroy(gameObject);
+				return;
+			}	
+			else if(stateMoveArea == MoveAreaState.REFLECT)
+			{
+
+				vec.x = -vec.x;
+
+			}								
+
+		}
+
+		else if (wposHead.x < minXReflect)
+		{
+
+			if (stateMoveArea == MoveAreaState.DELETE)
+			{
+				Destroy(gameObject);
+				return;
+			}
+			else if (stateMoveArea == MoveAreaState.REFLECT)
+			{
+
+				vec.x = -vec.x;
+
+			}
+
+		}
+
+		if (wposHead.y > maxYReflect)
+		{
+
+			if (stateMoveArea == MoveAreaState.DELETE)
+			{
+				Destroy(gameObject);
+				return;
+			}
+			else if (stateMoveArea == MoveAreaState.REFLECT)
+			{
+
+				vec.y = -vec.y;
+
+			}
+
+		}
+
+		else if (wposHead.y < minYReflect)
+		{
+
+			if (stateMoveArea == MoveAreaState.DELETE)
+			{
+				Destroy(gameObject);
+				return;
+			}
+			else if (stateMoveArea == MoveAreaState.REFLECT)
+			{
+
+				vec.y = -vec.y;
+
+			}
+
+		}
+
+		angleMove = Mathf.Atan2(vec.y, vec.x);
 
 	}
 
