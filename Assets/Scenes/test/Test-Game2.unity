@@ -13906,6 +13906,31 @@ Prefab:
       propertyPath: m_RootOrder
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 114296177159150534, guid: 28886ef76b9a7324d804b2dfebeaed95,
+        type: 2}
+      propertyPath: layerBlock.m_Bits
+      value: 4096
+      objectReference: {fileID: 0}
+    - target: {fileID: 114296177159150534, guid: 28886ef76b9a7324d804b2dfebeaed95,
+        type: 2}
+      propertyPath: layerBroken.m_Bits
+      value: 32768
+      objectReference: {fileID: 0}
+    - target: {fileID: 114296177159150534, guid: 28886ef76b9a7324d804b2dfebeaed95,
+        type: 2}
+      propertyPath: colorHead.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114296177159150534, guid: 28886ef76b9a7324d804b2dfebeaed95,
+        type: 2}
+      propertyPath: colorHead.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114296177159150534, guid: 28886ef76b9a7324d804b2dfebeaed95,
+        type: 2}
+      propertyPath: colorHead.b
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 28886ef76b9a7324d804b2dfebeaed95, type: 2}
   m_IsPrefabParent: 0

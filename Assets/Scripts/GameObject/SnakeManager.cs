@@ -36,6 +36,7 @@ public class SnakeManager : MonoBehaviour {
 	private GameObject objHead;
 	private List<GameObject> listBody = new List<GameObject>();
 	private GameObject objParentBody;
+	private GameObject objHeadObject; // 頭のSprite部分
 
 	// 生成パラメータ
 	[SerializeField]
@@ -84,13 +85,31 @@ public class SnakeManager : MonoBehaviour {
 	// 目 制御
 	private EyeManager managerEye;
 
+	// 色 制御
+	[SerializeField]
+	private Color colorHead = Color.white;
+	[SerializeField]
+	private Color[] colorBody;
+	[SerializeField]
+	private float intervalBlink = 0.25f;
+	[SerializeField]
+	private float timeBlink = 0.5f;
+	private float timerBlink = 0f;
 
 	private void Start()
 	{
 
+		// 胴部分の色がなければ、頭の色を代入
+		if(colorBody.Length == 0)
+		{
+			colorBody = new Color[1];
+			colorBody[0] = colorHead;
+		}
+
 		InitLayerValue();
 		CreateRightSnake();
-		
+		UpdateSnakeColor();
+
 	}
 
 	// 比較・代入用レイヤー値の計算
@@ -122,6 +141,7 @@ public class SnakeManager : MonoBehaviour {
 		UpdateDestroyBlock();
 		ReflectSnake();
 		MoveSnake();
+		UpdateSnakeColor();
 
 	}
 
@@ -160,7 +180,10 @@ public class SnakeManager : MonoBehaviour {
 		
 		// 頭の生成
 		objHead = Instantiate(prefabHead, (Vector3)pos, Quaternion.Euler(0f, 0f, angle), transform);
-		GameObject objHeadObject = objHead.transform.GetChild(0).gameObject;
+		if (objHead.transform.childCount >= 0)
+		{
+			objHeadObject = objHead.transform.GetChild(0).gameObject;
+		}
 
 		wposHead = pos;
 		angleHead = angle * Mathf.Deg2Rad;
@@ -216,6 +239,8 @@ public class SnakeManager : MonoBehaviour {
 	private void UpdateDestroyBlock()
 	{
 
+		int countDestroy = 0;
+
 		foreach(GameObject obj in listBody)
 		{
 
@@ -226,12 +251,18 @@ public class SnakeManager : MonoBehaviour {
 				GameObject last = listBody[listBody.Count - 1];
 				Destroy(last);
 
+				countDestroy++;
+
 				obj.layer = layerValueBlock;
+
+				// 破壊があれば点滅
+				timerBlink = timeBlink;
 
 			}
 
 		}
 
+		listBody.RemoveRange(listBody.Count - countDestroy, countDestroy);
 		currentLength = listBody.Count;
 
 	}
@@ -405,6 +436,53 @@ public class SnakeManager : MonoBehaviour {
 		}
 
 		angleMove = Mathf.Atan2(vec.y, vec.x);
+
+	}
+
+	// 蛇の色更新
+	private void UpdateSnakeColor()
+	{
+
+		float alpha = 1f;
+		
+		if (timerBlink > 0f)
+		{
+			alpha = Mathf.Abs(Mathf.Sin(timerBlink / intervalBlink * Mathf.PI));
+			timerBlink -= Time.deltaTime;
+		}
+
+		// 顔
+		{
+
+			SpriteRenderer renderer = objHeadObject.GetComponent<SpriteRenderer>();
+			if(renderer != null)
+			{
+
+				Color color = colorHead;
+				color.a = alpha;
+				renderer.color = color;
+
+			}
+
+		}
+
+		int lenColor = colorBody.Length;
+		for(int i = 0; i < currentLength; i++)
+		{
+
+			int indexColor = i % lenColor;
+
+			SpriteRenderer renderer = listBody[i].GetComponent<SpriteRenderer>();
+			if (renderer != null)
+			{
+
+				Color color = colorBody[indexColor];
+				color.a = alpha;
+				renderer.color = color;
+
+			}
+
+		}
 
 	}
 
