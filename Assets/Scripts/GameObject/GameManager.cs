@@ -4,15 +4,36 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-	
 
-	// Use this for initialization
-	void Start () {
+
+	// 参照して制御するゲームオブジェクト
+	[SerializeField]
+	private PlayerMove playerMove;
+
+	private void Awake()
+	{
+
+		InitializeGame();
+
+	}
+
+	private void Start ()
+	{
 		
+
+
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	// ゲームの初期化
+	private void InitializeGame()
+	{
+
+		playerMove.enabled = false;
+
+	}
+
+	void Update ()
+	{
 		
 	}
 }

@@ -325,9 +325,6 @@ public class SnakeManager : MonoBehaviour {
 			wposBufHead = wposHead + rate * (scaleBody + intervalBodytoBody) * new Vector2(Mathf.Cos(angleMove), Mathf.Sin(angleMove));
 			angleBufHead = angleMove;
 
-			Debug.DrawRay((Vector3)(wposBufHead) + new Vector3(0, 0, 1), Vector3.up * scaleBody, new Color(1f, 0f, 0f));
-			Debug.DrawRay((Vector3)(wposBufHead) + new Vector3(0, 0, 1), Vector3.right * scaleBody, new Color(0f, 1f, 0f));
-
 			// 胴の移動
 			for (int i = 0; i < currentLength; i++)
 			{
