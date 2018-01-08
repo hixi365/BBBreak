@@ -16,9 +16,24 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	private GameObject objBlockParent;
 
+	// 破壊可能な蛇のゲームオブジェクト
+	[SerializeField]
+	private GameObject[] objCanDestroySnake;
+	private int numSnake;
+
+	// 弾を撃つ蛇のゲームオブジェクト
+	[SerializeField]
+	private GameObject[] objShotSnake;
+
 	// 終了時に出すキャンバス
 	[SerializeField]
 	private GameObject objCanvas;
+	[SerializeField]
+	private UnityEngine.UI.Text textResultHead;
+	[SerializeField]
+	private UnityEngine.UI.Text textResultBody;
+	[SerializeField]
+	private GameObject objButton;
 
 	[SerializeField]
 	private LayerMask layerBroken;   // 破壊済ブロックレイヤータグ
@@ -28,9 +43,11 @@ public class GameManager : MonoBehaviour {
 	private float waitForPlaying = 4.0f;    // ゲーム開始までのwait
 
 	// フラグ
-	private bool flgEnd = true;		// 終了
+	private bool flgEnd = false;	// 終了
 	private bool flgMiss = false;   // ミス
-	private bool flgClear = false;	// クリア
+	private bool flgClear = false;  // クリア
+	private bool flgInGame = false;	// ゲーム中か否か
+
 
 	private void Awake()
 	{
@@ -39,7 +56,7 @@ public class GameManager : MonoBehaviour {
 
 	}
 
-	private void Start ()
+	private void Start()
 	{
 
 		InitLayerValue();
@@ -65,11 +82,30 @@ public class GameManager : MonoBehaviour {
 	private void InitializeGame()
 	{
 
+		// プレイヤーの移動を無効に
 		playerMove.enabled = false;
+	
+		// 破壊可能な蛇の数をカウント
+		numSnake = objCanDestroySnake.Length;
 
+		// Result表示のキャンバスを消す
 		if (objCanvas != null)
 		{
 			objCanvas.SetActive(false);
+		}
+
+		// ゲーム開始まで蛇が弾を撃たないようにする
+		foreach(GameObject obj in objShotSnake)
+		{
+
+			SnakeManager snake = obj.GetComponent<SnakeManager>();
+			if(snake)
+			{
+
+				snake.SetShotState(0);
+
+			}
+
 		}
 
 	}
@@ -80,33 +116,85 @@ public class GameManager : MonoBehaviour {
 
 		yield return new WaitForSeconds(waitForPlaying);
 		playerMove.enabled = true;
+		flgInGame = true;
+
+		// 蛇が弾を撃つようにする
+		foreach (GameObject obj in objShotSnake)
+		{
+
+			SnakeManager snake = obj.GetComponent<SnakeManager>();
+			if (snake)
+			{
+
+				snake.SetShotState(1);
+
+			}
+
+		}
 
 	}
 
-	private void Update ()
+	private void Update()
 	{
+
+		if(flgInGame == false)
+		{
+
+			return;
+
+		}
 
 		bool f = CheckEnd();
 		if(f == true)
 		{
 
 			flgEnd = true;
-			DrawResult();
-
+			StartCoroutine(ResultCoroutin());
 		}
 
 	}
 
-	// 結果の表示
-	private void DrawResult()
+	// 結果の表示コルーチン
+	IEnumerator ResultCoroutin()
 	{
 
-		if (objCanvas == null)
+		if (textResultHead != null)
 		{
-			return;
+			if (flgMiss)
+			{
+				textResultHead.text = "Failed";
+			}
 		}
 
-		objCanvas.SetActive(true);
+		if (objCanvas != null)
+		{
+			objCanvas.SetActive(true);
+		}
+
+		yield return new WaitForSeconds(1f);
+
+		if (textResultBody != null)
+		{
+
+			textResultBody.gameObject.SetActive(true);
+
+			textResultBody.text = "";
+			textResultBody.text += "壊したブロック\n";
+			textResultBody.text += (49 - objBlockParent.transform.childCount).ToString() + "\n";　// まずい
+			textResultBody.text += "\n";
+			textResultBody.text += "倒した蛇\n";
+			textResultBody.text += (numSnake - objCanDestroySnake.Length).ToString() + "\n";
+
+		}
+
+		yield return new WaitForSeconds(1f);
+
+		if (objButton != null)
+		{
+
+			objButton.SetActive(true);
+
+		}
 
 	}
 

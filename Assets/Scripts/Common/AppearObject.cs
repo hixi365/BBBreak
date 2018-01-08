@@ -7,7 +7,7 @@ using UnityEngine;
 public class AppearObject : MonoBehaviour {
 
 	[SerializeField]
-	private GameObject obj;
+	private GameObject[] obj;
 
 	[SerializeField]
 	private float delay = 1f;
@@ -24,7 +24,12 @@ public class AppearObject : MonoBehaviour {
 
 		}
 
-		obj.SetActive(false);
+		foreach (GameObject o in obj)
+		{
+
+			o.SetActive(false);
+
+		}
 
 	}
 
@@ -36,7 +41,13 @@ public class AppearObject : MonoBehaviour {
 		if(timeTotal > delay)
 		{
 
-			obj.SetActive(true);
+			foreach (GameObject o in obj)
+			{
+
+				o.SetActive(true);
+
+			}
+
 			Destroy(this);
 
 		}

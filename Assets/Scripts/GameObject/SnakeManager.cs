@@ -629,4 +629,28 @@ public class SnakeManager : MonoBehaviour {
 
 	}
 
+	// ShotModeの指定
+	public void SetShotState(int mode)
+	{
+
+		ShotState state = ShotState.NONE;
+
+		switch(mode)
+		{
+			case 0:
+
+				state = ShotState.NONE;
+				break;
+
+			case 1:
+
+				state = ShotState.RANDOM;
+				break;
+
+		}
+
+		stateShot = state;
+
+	}
+
 }

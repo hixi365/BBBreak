@@ -51,13 +51,14 @@ public class ReflectBullet : MonoBehaviour {
     // SerializeField game setting
     [SerializeField]
     private float degMaxPlayerRefrect = 45;    // プレイヤーの端部に当たった最大反射角 (45 : 10.5時 ～ 1.5時)
+	[SerializeField]
+	private float autoDestroySecondsNoReflect = 5;	// 一定時間接触が無かった場合、削除する
 
-    // private
-    private SpriteRenderer rendererOwn; // 自身のスプライトレンダラ
+	// private
+	private SpriteRenderer rendererOwn; // 自身のスプライトレンダラ
 	private int layerValueBroken;        // 破壊済ブロックレイヤー (書き込み用)
-    [SerializeField]
-
 	private float pixelsSprite;           // スプライトの大きさ
+	private float secondsNoReflect = 0f;	// 接触していない時間
 
 	private void Awake()
 	{
@@ -96,6 +97,16 @@ public class ReflectBullet : MonoBehaviour {
 
 	private void Update()
 	{
+
+		// 一定時間、反射が無ければ削除する
+		secondsNoReflect += Time.deltaTime;
+		if(secondsNoReflect > autoDestroySecondsNoReflect)
+		{
+
+			Destroy(gameObject);
+			return;
+
+		}
 
 		// レイキャストによる弾の移動
 		RaycastMove();
@@ -256,6 +267,12 @@ public class ReflectBullet : MonoBehaviour {
 			if (hit == false)
 			{
 				break;
+			}
+
+			else
+			{
+				// 接触していない時間をリセット
+				secondsNoReflect = 0f;
 			}
 
 		}
