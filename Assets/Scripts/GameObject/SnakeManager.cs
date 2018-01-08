@@ -16,6 +16,16 @@ public class SnakeManager : MonoBehaviour {
 	[SerializeField]
 	private MoveAreaState stateMoveArea = MoveAreaState.NONE;
 
+	// 蛇の目の動き方
+	//  NONE	未指定 (何もしない)
+	//	CENTER	中央を見る
+	//	MOVE	移動方向を向く
+	//	PLAYER	プレイヤーの方を向く
+	enum EyeState { NONE, CENTER, MOVE, PLAYER };
+
+	[SerializeField]
+	private EyeState stateEye = EyeState.NONE;
+
 	// prefab
 	[SerializeField]
 	private GameObject prefabHead;
@@ -199,6 +209,17 @@ public class SnakeManager : MonoBehaviour {
 
 		// 目の取得
 		managerEye = objHead.GetComponent<EyeManager>();
+		if(managerEye != null)
+		{
+		
+			if (stateEye == EyeState.CENTER)
+			{
+
+				managerEye.SetToPOs(Vector2.zero);
+
+			}
+
+		}
 		
 		// 胴の生成
 		objParentBody = new GameObject("Bodies");
@@ -366,6 +387,19 @@ public class SnakeManager : MonoBehaviour {
 
 			obj.transform.position = (Vector3)wposBody[i];
 			obj.transform.rotation = Quaternion.Euler(0f, 0f, angleBody[i] * Mathf.Rad2Deg);
+
+		}
+
+		// 目の向き
+		if (managerEye != null)
+		{
+
+			if (stateEye == EyeState.MOVE)
+			{
+
+				managerEye.SetRadAndAngle(1.2f, angleMove);
+
+			}
 
 		}
 

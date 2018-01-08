@@ -50,3 +50,18 @@ TagManager:
   - name: Eye
     uniqueID: 2460766721
     locked: 0
+  - name: None1
+    uniqueID: 3016126223
+    locked: 0
+  - name: None2
+    uniqueID: 700732755
+    locked: 0
+  - name: None3
+    uniqueID: 3743377079
+    locked: 0
+  - name: None4
+    uniqueID: 4188397763
+    locked: 0
+  - name: UI
+    uniqueID: 665731347
+    locked: 0

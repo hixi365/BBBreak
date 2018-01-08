@@ -15,7 +15,7 @@ public class EyeManager : MonoBehaviour {
 	private EyeState state = EyeState.NONE;
 
 	// 黒目の最大半径 (画像の幅 * この定数 = 最大移動半径)
-	private const float MAX_BLACK_EYE_RADIUS_RATE = 0.8f;
+	private const float MAX_BLACK_EYE_RADIUS_RATE = 1.2f;
 
 	// スプライト 黒目部分の配列
 	[SerializeField]
@@ -33,7 +33,9 @@ public class EyeManager : MonoBehaviour {
 
 	void Start()
 	{
-		
+
+		InitEyes();
+
 	}
 	
 	void Update ()
@@ -72,7 +74,11 @@ public class EyeManager : MonoBehaviour {
 		{
 
 			objBlackEye[i].transform.localPosition = Vector3.zero;
-			scaleEye[i] = objBlackEye[i].transform.localScale.x;
+			SpriteRenderer renderer = objBlackEye[i].GetComponent<SpriteRenderer>();
+			
+			if (renderer) {
+				scaleEye[i] = objBlackEye[i].transform.localScale.x * renderer.sprite.rect.x / renderer.sprite.pixelsPerUnit;
+			}
 
 		}
 
@@ -103,7 +109,8 @@ public class EyeManager : MonoBehaviour {
 
 			float rad = scaleEye[i] * MAX_BLACK_EYE_RADIUS_RATE;
 
-			objBlackEye[i].transform.localPosition = toVec * rad;
+			objBlackEye[i].transform.localPosition = Vector3.zero;
+			objBlackEye[i].transform.position += (Vector3)toVec * rad;
 
 		}
 
@@ -119,7 +126,8 @@ public class EyeManager : MonoBehaviour {
 			Vector2 toVec = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
 			float rad = scaleEye[i] * Mathf.Min( radius , MAX_BLACK_EYE_RADIUS_RATE );
 
-			objBlackEye[i].transform.localPosition = toVec * rad;
+			objBlackEye[i].transform.localPosition = Vector3.zero;
+			objBlackEye[i].transform.position += (Vector3)toVec * rad;
 
 		}
 
