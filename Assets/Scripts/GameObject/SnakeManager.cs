@@ -26,11 +26,21 @@ public class SnakeManager : MonoBehaviour {
 	[SerializeField]
 	private EyeState stateEye = EyeState.NONE;
 
+	// 蛇の弾の撃ち方
+	//  NONE	未指定 (何もしない)
+	//	RANDOM	適当に撃つ
+	enum ShotState { NONE, RANDOM };
+
+	[SerializeField]
+	private ShotState stateShot = ShotState.NONE;
+
 	// prefab
 	[SerializeField]
 	private GameObject prefabHead;
 	[SerializeField]
 	private GameObject prefabBody;
+	[SerializeField]
+	private GameObject prefabShot;
 
 	// layer
 	[SerializeField]
@@ -53,6 +63,15 @@ public class SnakeManager : MonoBehaviour {
 	private int lengthBody; // 生成時の胴体の数
 	[SerializeField]
 	private float intervalBodytoBody; // ボディ間のオフセット 
+
+	// フラグ
+	[SerializeField]
+	private bool flgMuteki = false;
+
+	// ショットパラメータ
+	[SerializeField]
+	private float intervalShot = 3f;
+	private float timerShot = 0f;
 
 	// 生成した胴の長さ
 	private float scaleBody;
@@ -119,7 +138,7 @@ public class SnakeManager : MonoBehaviour {
 		InitLayerValue();
 		CreateRightSnake();
 		UpdateSnakeColor();
-
+		
 	}
 
 	// 比較・代入用レイヤー値の計算
@@ -152,6 +171,7 @@ public class SnakeManager : MonoBehaviour {
 		ReflectSnake();
 		MoveSnake();
 		UpdateSnakeColor();
+		UpdateShot();
 
 	}
 
@@ -260,8 +280,17 @@ public class SnakeManager : MonoBehaviour {
 	private void UpdateDestroyBlock()
 	{
 
+		// 無敵の場合
+		if (flgMuteki == true)
+		{
+
+			currentLength = listBody.Count;
+			return;
+
+		}
+
 		// 頭に直撃した場合破壊
-		if(objHeadObject.layer == layerValueBroken)
+		if (objHeadObject.layer == layerValueBroken)
 		{
 
 			Destroy(gameObject);
@@ -532,6 +561,71 @@ public class SnakeManager : MonoBehaviour {
 			}
 
 		}
+
+	}
+
+	// 弾の発射
+	private void UpdateShot()
+	{
+
+		if(stateShot == ShotState.NONE)
+		{
+
+			return;
+
+		}
+
+		if(prefabShot == null)
+		{
+
+			return;
+
+		}
+
+		timerShot += Time.deltaTime;
+		if(intervalShot > timerShot)
+		{
+
+			return;
+
+		}
+
+		timerShot -= intervalShot;
+
+		if(stateShot == ShotState.RANDOM)
+		{
+
+			ShotRandom();
+
+		}
+
+
+	}
+
+	// ランダムに弾を発射
+	private void ShotRandom()
+	{
+
+		GameObject obj = Instantiate(prefabShot, objHead.transform.position, Quaternion.identity);
+
+		if (obj == null)
+		{
+
+			return;
+
+		}
+
+		ReflectBullet bullet = obj.GetComponent<ReflectBullet>();
+
+		if (bullet == null)
+		{
+
+			return;
+
+		}
+
+		bullet.SetEnemyShot(Vector3.zero, 0f);
+		bullet.SetRandomMoveVec(1.5f);
 
 	}
 

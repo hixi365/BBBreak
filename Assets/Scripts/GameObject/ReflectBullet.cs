@@ -74,10 +74,6 @@ public class ReflectBullet : MonoBehaviour {
 			layerValueBroken++;
         }
 
-        // transformの取得
-        posCurrent = transform.localPosition;
-        angleCurrent = transform.localRotation.eulerAngles.z;
-
 		// NONEの場合 ランダムで初期化
 		if (stateShot == ShotState.NONE)
 		{
@@ -88,6 +84,10 @@ public class ReflectBullet : MonoBehaviour {
 
     private void Start()
 	{
+
+		// transformの取得
+		posCurrent = transform.localPosition;
+		angleCurrent = transform.localRotation.eulerAngles.z;
 
 		// 弾色の初回更新
 		UpdateSpriteColor();
@@ -389,6 +389,7 @@ public class ReflectBullet : MonoBehaviour {
 		else if (1 << c.collider.gameObject.layer == layerFailed.value)
 		{
 
+			BrokenBlock(c.collider.gameObject);	// レイヤーにフラグ書き込み
 			Destroy(gameObject);
 			return false;
 
